@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OrderTexi.Modals
 {
@@ -11,13 +12,27 @@ namespace OrderTexi.Modals
     }
     public class Texi
     {
-        [Key] 
+        
+        //public Texi(Texi texi)
+        //{
+        //    this.TexiId = texi.TexiId;
+        //    this.XgoogleMaps = texi.XgoogleMaps;
+        //    this.YgoogleMaps = texi.YgoogleMaps;
+        //    this.Tstatus = texi.Tstatus;
+        //    this.Tdriver = texi.Tdriver;
+        //}
         //לבדוק הגדרה של 
+        [Key]
         public int TexiId { get; set; }
-        public int XgoogleMaps;
-        public int YgoogleMaps;
-        [ForeignKey ("driver")] int Tdriver { get; set; }
-        public Status Tstatus;
+        [ Column ,DisallowNull ]
+        public int XgoogleMaps { get; set; }
+        [Column , DisallowNull]
+        public int YgoogleMaps { get; set; }
+        [ ForeignKey("DriverId") ]
+        public virtual Driver TDriverId { get; set; }
+
+        [Column ,DisallowNull ]
+        public Status Tstatus { get; set; }
 
     }
 }

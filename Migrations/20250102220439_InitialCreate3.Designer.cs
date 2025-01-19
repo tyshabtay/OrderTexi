@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderTexi.Data;
 
@@ -10,9 +11,11 @@ using OrderTexi.Data;
 namespace OrderTexi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250102220439_InitialCreate3")]
+    partial class InitialCreate3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +80,6 @@ namespace OrderTexi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TexiId"));
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Tstatus")
                         .HasColumnType("int");
 
@@ -90,8 +90,6 @@ namespace OrderTexi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TexiId");
-
-                    b.HasIndex("DriverId");
 
                     b.ToTable("Texis");
                 });
@@ -107,17 +105,6 @@ namespace OrderTexi.Migrations
                     b.HasKey("Uid");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("OrderTexi.Modals.Texi", b =>
-                {
-                    b.HasOne("OrderTexi.Modals.Driver", "Tdriver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tdriver");
                 });
 #pragma warning restore 612, 618
         }

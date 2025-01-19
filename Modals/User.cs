@@ -1,12 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OrderTexi.Modals
 {
     public class User
     {
-      [Key]  public int Uid { get; set; }
-        private string UserName { get; set; }
-        private string Password { get; set; }
-        private string Jwt { get; set; }
+        [Key]
+        public string Jwt { get; set; }
+        [  Column, NotNull]
+        public string UserName { get; set; }
+        [Column, NotNull]
+        public string Password { get; set; }
+        [Column, NotNull]
+        public string Name { get; set; }
+
+
+   
     }
 }
