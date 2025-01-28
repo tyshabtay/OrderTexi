@@ -11,8 +11,8 @@ using OrderTexi.Data;
 namespace OrderTexi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250104202421_UpdateItemSchema")]
-    partial class UpdateItemSchema
+    [Migration("20250128193751_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,11 @@ namespace OrderTexi.Migrations
 
             modelBuilder.Entity("OrderTexi.Modals.Driver", b =>
                 {
-                    b.Property<int>("driver")
+                    b.Property<int>("DriverId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("driver"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DriverId"));
 
                     b.Property<string>("DriverName")
                         .IsRequired()
@@ -39,7 +39,7 @@ namespace OrderTexi.Migrations
                     b.Property<int>("Phone")
                         .HasColumnType("int");
 
-                    b.HasKey("driver");
+                    b.HasKey("DriverId");
 
                     b.ToTable("Drivers");
                 });
@@ -69,7 +69,7 @@ namespace OrderTexi.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("orders");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("OrderTexi.Modals.Texi", b =>
@@ -79,6 +79,9 @@ namespace OrderTexi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TexiId"));
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Tstatus")
                         .HasColumnType("int");
@@ -91,20 +94,38 @@ namespace OrderTexi.Migrations
 
                     b.HasKey("TexiId");
 
+                    b.HasIndex("DriverId");
+
                     b.ToTable("Texis");
                 });
 
             modelBuilder.Entity("OrderTexi.Modals.User", b =>
                 {
-                    b.Property<int>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Uid"));
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Uid");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("users");
+                    b.HasKey("UserName");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OrderTexi.Modals.Texi", b =>
+                {
+                    b.HasOne("OrderTexi.Modals.Driver", "TDriver")
+                        .WithMany()
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TDriver");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,15 +27,15 @@ namespace OrderTexi.Controllers
             var entities = _context.Drivers.ToList();
             var currentDriver = entities.FirstOrDefault(i => i.DriverId == id);
             if (currentDriver == null)
-            { return null; }             
+            { return null; }
             return currentDriver;
         }
         [HttpPost]
-        public async void AddNewDriver([FromBody]Driver newDriver)
+        public async void AddNewDriver([FromBody] Driver newDriver)
         {
             var entities = _context.Drivers.ToList();
             entities.Add(newDriver);
-          await  _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDriverById(int id, [FromBody] Driver value)

@@ -20,7 +20,7 @@ namespace OrderTexi.Controllers
             var emailAddress = new EmailAddressAttribute();
             return emailAddress.IsValid(email);
         }
-        public static bool  IsValidPassword(string password)
+        public static bool IsValidPassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password) || password.Length < 8 || password.Length > 10)
                 return false;
@@ -32,11 +32,15 @@ namespace OrderTexi.Controllers
         //{
         //  //  פונקצית sendmail שמחזירה הודעה נשלח לך סיסמא למייל ומשם תמשים את התהליך
         //}
+        //public void SendMail()
+        //{
+
+        //}
         [HttpPut("{password}")]
         public async Task<IActionResult> UpdatePasswordByUserName(string userName, string password, string newPassword)
         {
 
-            var entities = _context.users.ToList();
+            var entities = _context.Users.ToList();
             var currentUser = entities.FirstOrDefault(i => i.UserName == userName && i.Password == password);
             if (currentUser == null)
             {
@@ -53,7 +57,7 @@ namespace OrderTexi.Controllers
         [HttpPost]
         public string AddNewUser(string userName, string password, string name)
         {
-            var entities = _context.users.ToList();
+            var entities = _context.Users.ToList();
             //וולידציה לבדוק בהמשך איך מוודאים שהמייל תקין וכן איך בודקים שהסיסמא מכילה אות גדולה +אות קטנה + מספרים
             if (UserController.IsValidPassword(password) && UserController.IsValidEmail(userName))
             {

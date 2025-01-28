@@ -12,7 +12,7 @@ namespace OrderTexi.Modals
     }
     public class Texi
     {
-        
+
         //public Texi(Texi texi)
         //{
         //    this.TexiId = texi.TexiId;
@@ -22,16 +22,15 @@ namespace OrderTexi.Modals
         //    this.Tdriver = texi.Tdriver;
         //}
         //לבדוק הגדרה של 
-        [Key]
+        [Key ,NotNull]
         public int TexiId { get; set; }
-        [ Column ,DisallowNull ]
+        [Column, DisallowNull]
         public int XgoogleMaps { get; set; }
-        [Column , DisallowNull]
+        [Column, DisallowNull]
         public int YgoogleMaps { get; set; }
-        [ ForeignKey("DriverId") ]
-        public virtual Driver TDriverId { get; set; }
-
-        [Column ,DisallowNull ]
+        [ForeignKey("DriverId") ]
+        public virtual Driver TDriver { get; set; }
+        [Column, DisallowNull]
         public Status Tstatus { get; set; }
 
     }

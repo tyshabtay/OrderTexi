@@ -16,7 +16,7 @@ namespace OrderTexi.Modals
         public int XDestination { get; set; }
         [Column, DisallowNull]
         public int YDestination { get; set; }
-        [ForeignKey ("driver")]  public int OrderDriver;
+        [ForeignKey("driver")] public int OrderDriver;
         [Column, DisallowNull]
         public int OrderPhone { get; set; }
 

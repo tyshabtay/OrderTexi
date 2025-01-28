@@ -16,7 +16,7 @@ namespace OrderTexi.Controllers
     public class TaxiController : ControllerBase
     {
         private readonly AppDbContext _context;
-       
+
         public TaxiController(AppDbContext context)
         {
             _context = context;
@@ -41,20 +41,28 @@ namespace OrderTexi.Controllers
         //    catch { return new Texi(); }
 
         //}
+      
         [HttpGet("{driverId}")]
         public async Task<IActionResult> GetTexiByDriverId(int driverId)
         {
-            var query = from texi in _context.Texis
-                        join driver in _context.Drivers
-                      on texi.TDriverId.DriverId equals driver.DriverId
+            var texies = _context.Texis.ToList();
+            var drivers= _context.Drivers.ToList();
+            var query = from texi in texies
+                         join driver  in drivers
+                     on  (int) texi.TDriver.DriverId equals (int) driver.DriverId
+                     //into gj
+                     //   from subB in gj.DefaultIfEmpty()
                         select new
                         {
-                            TexiId = texi.TexiId,
-                            XgoogleMaps = texi.XgoogleMaps,
+                         TexiId =   texi.TexiId,
+                            XgoogleMaps =texi.XgoogleMaps,
                             YgoogleMaps = texi.YgoogleMaps,
-                            Tdriver = texi.TDriverId,
+                            Tdriver = texi.TDriver,
                             Tstatus = texi.Tstatus
                         };
+                // בצע את השאילתות כאן
+            
+       
             var result = await query.FirstOrDefaultAsync();
             return Ok(result);
         }
@@ -86,7 +94,7 @@ namespace OrderTexi.Controllers
         {
             var entities = _context.Texis.ToList();
             var texi = entities.FirstOrDefault(i => i.TexiId == value.TexiId);
-            if(texi==null)
+            if (texi == null)
             {
                 return NotFound();
             }
@@ -96,10 +104,10 @@ namespace OrderTexi.Controllers
                 var newValue = property.GetValue(value);
                 property.SetValue(texi, newValue);
             }
-       
 
-            
-           await     _context.SaveChangesAsync();
+
+
+            await _context.SaveChangesAsync();
             return Ok(texi);
         }
 
@@ -108,14 +116,15 @@ namespace OrderTexi.Controllers
         {
             var entities = _context.Texis.ToList();
             var item = entities.FirstOrDefault(i => i.TexiId == id);
-            if(item==null)
+            if (item == null)
             {
                 return NotFound();
-            }    
+            }
             _context.Remove(item);
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
- 
 
-    } }
+
+    }
+}

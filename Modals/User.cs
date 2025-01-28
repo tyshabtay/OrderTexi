@@ -6,16 +6,15 @@ namespace OrderTexi.Modals
 {
     public class User
     {
+        // public string Jwt { get; set; }
         [Key]
-        public string Jwt { get; set; }
-        [  Column, NotNull]
         public string UserName { get; set; }
-        [Column, NotNull]
+        [Column, DisallowNull]
         public string Password { get; set; }
-        [Column, NotNull]
+        [Column, DisallowNull]
         public string Name { get; set; }
 
 
-   
+
     }
 }

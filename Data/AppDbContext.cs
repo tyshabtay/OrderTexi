@@ -13,11 +13,13 @@ namespace OrderTexi.Data
         {
 
         }
-           
+        public AppDbContext()
+        {
+
+        }
         public DbSet<Texi> Texis { get; set; }
         public DbSet<Driver> Drivers { get; set; }
-        public DbSet<Order> orders { get; set; }
-        public DbSet<User> users { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
