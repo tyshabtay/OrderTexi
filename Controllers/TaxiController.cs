@@ -1,8 +1,11 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderTexi.Data;
 using OrderTexi.Modals;
+using OrderTexi.Services;
+using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
@@ -43,27 +46,29 @@ namespace OrderTexi.Controllers
         //}
       
         [HttpGet("{driverId}")]
-        public async Task<IActionResult> GetTexiByDriverId(int driverId)
+        public async  Task<IActionResult> GetTexiByDriverId(int driverId)
         {
+          //  SmtpClient client = new SmtpClient("smtp.example.com", 587); // או 465 בהתאם לשרת
+            EmailService.SendEmail();
             var texies = _context.Texis.ToList();
             var drivers= _context.Drivers.ToList();
-            var query = from texi in texies
-                         join driver  in drivers
-                     on  (int) texi.TDriver.DriverId equals (int) driver.DriverId
-                     //into gj
-                     //   from subB in gj.DefaultIfEmpty()
-                        select new
+            var result =  (from texi in texies
+                        join driver in drivers
+                    on (int)texi.TDriver.DriverId equals (int)driver.DriverId
+                      
+                        select
+                        new
                         {
-                         TexiId =   texi.TexiId,
-                            XgoogleMaps =texi.XgoogleMaps,
+                            TexiId = texi.TexiId,
+                            XgoogleMaps = texi.XgoogleMaps,
                             YgoogleMaps = texi.YgoogleMaps,
                             Tdriver = texi.TDriver,
                             Tstatus = texi.Tstatus
-                        };
-                // בצע את השאילתות כאן
-            
-       
-            var result = await query.FirstOrDefaultAsync();
+                        }).FirstOrDefault();
+            // בצע את השאילתות כאן
+
+
+            //var result = await query.FirstOrDefault();
             return Ok(result);
         }
         ////פונקציה לא מושלמת של שליפה לפי איזור
@@ -81,14 +86,19 @@ namespace OrderTexi.Controllers
         //    }
         //    return texis;
         //}
-        //[HttpGet("{status}")]
-        //public IEnumerable<Texi> GetTexiesByStatus(Status status)
+        //[HttpPut ("/updateStatusByTexiId/{texiId,status}")]
         //{
-        //    var entities = _context.Texis.ToList();
-        //    var texies = entities.Where(i => i.Tstatus == status);
+        //var entities = _context.Texis.ToList();
+        //var texies = entities.Where(i => i.Tstatus == status);
         //    return texies;
-
         //}
+        [HttpGet("/status/{status}")]
+        public IEnumerable<Texi> GetTexiesByStatus(Status status)
+        {
+            var entities = _context.Texis.ToList();
+            var texies = entities.Where(i => i.Tstatus == status);
+            return texies;
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTexiById(int id, [FromBody] Texi value)
         {
